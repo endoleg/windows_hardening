@@ -1,6 +1,8 @@
-# Windows 10 Hardening
+# HardeningKitty and Windows 10 Hardening
 
 ## Introduction
+
+The project started as a simple hardening list for Windows 10. After some time, HardeningKitty was created to simplify the hardening of Windows. Now, HardeningKitty supports guidelines from Microsoft, CIS Benchmarks, DoD STIG and BSI SiSyPHuS Win10. And of course my own hardening list. 
 
 This is a hardening checklist that can be used in private and business environments for hardening Windows 10. The checklist can be used for all Windows versions, but in Windows 10 Home the Group Policy Editor is not integrated and the adjustment must be done directly in the registry. For this, there is the _HailMary_ mode from _HardeningKitty_. 
 
@@ -94,6 +96,12 @@ HardeningKitty can be used to audit systems against the following baselines / be
 | :--- | :---------------- | :------  |
 | 0x6d69636b (Machine) | 2009 | |
 | 0x6d69636b (User) | 2009 | |
+| BSI SiSyPHuS Windows 10 hoher Schutzbedarf Domänenmitglied (Machine) | 1809 | 1.0 |
+| BSI SiSyPHuS Windows 10 hoher Schutzbedarf Domänenmitglied (User) | 1809| 1.0
+| BSI SiSyPHuS Windows 10 normaler Schutzbedarf Domänenmitglied (Machine) | 1809| 1.0 |
+| BSI SiSyPHuS Windows 10 normaler Schutzbedarf Domänenmitglied (User) | 1809| 1.0 |
+| BSI SiSyPHuS Windows 10 normaler Schutzbedarf Einzelrechner (Machine) | 1809| 1.0 |
+| BSI SiSyPHuS Windows 10 normaler Schutzbedarf Einzelrechner (User) | 1809 | 1.0 |
 | CIS Microsoft Windows 10 Enterprise (Machine) | 1809 | 1.6.1 |
 | CIS Microsoft Windows 10 Enterprise (User) | 1809 | 1.6.1 |
 | CIS Microsoft Windows 10 Enterprise (Machine) | 1903 | 1.7.1 |
@@ -128,6 +136,8 @@ HardeningKitty can be used to audit systems against the following baselines / be
 | Microsoft Security baseline for Office 365 ProPlus (User) | Sept 2019 | Final |
 | Microsoft Security Baseline for Microsoft 365 Apps for enterprise (Machine) | March 2021 | Final |
 | Microsoft Security Baseline for Microsoft 365 Apps for enterprise (User) | March 2021 | Final |
+| Microsoft Windows Server TLS Settings | 1809 | 1.0 |
+| Microsoft Windows Server TLS Settings (Future Use with TLSv1.3) | 1903 | 1.0 |
 
 ## Sources
 
@@ -159,3 +169,9 @@ HardeningKitty can be used to audit systems against the following baselines / be
 * [BSI: Microsoft Office Telemetry Analysis report](https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Publikationen/Studien/Office_Telemetrie/Office_Telemetrie.pdf?__blob=publicationFile&v=5)
 * [Use policy settings to manage privacy controls for Microsoft 365 Apps for enterprise](https://docs.microsoft.com/en-us/deployoffice/privacy/manage-privacy-controls)
 * [DoD Cyber Exchange Public - Security Technical Implementation Guides (STIGs) - Group Policy Objects](https://public.cyber.mil/stigs/gpo/)
+* [BSI SiSyPHuS Win10: Windows 10 Hardening Guideline](https://www.bsi.bund.de/EN/Topics/Cyber-Security/Recommendations/SiSyPHuS_Win10/AP11/SiSyPHuS_AP11.html)
+* [Setup Microsoft Windows or IIS for SSL Perfect Forward Secrecy and TLS 1.2](https://www.hass.de/content/setup-microsoft-windows-or-iis-ssl-perfect-forward-secrecy-and-tls-12)
+* [Nartac Software - IIS Crypto](https://www.nartac.com/Products/IISCrypto/)
+* [Transport Layer Security (TLS) best practices with the .NET Framework](https://docs.microsoft.com/en-us/dotnet/framework/network-programming/tls)
+* [Microsoft TLS 1.3 Support Reference](https://devblogs.microsoft.com/premier-developer/microsoft-tls-1-3-support-reference/)
+* [TLS Cipher Suites in Windows Server 2022](https://docs.microsoft.com/en-us/windows/win32/secauthn/tls-cipher-suites-in-windows-server-2022)

@@ -62,11 +62,22 @@
 
         The name and location of the report file can be defined by the user.
 
+    .PARAMETER SkipMachineInformation
+
+        Information about the system is not queried and displayed. This may be useful while debugging or
+        using multiple lists on the same system.
+
     .EXAMPLE
         
-        Invoke-HardeningKitty -Mode "Audit" -Log -Report
+        Description: HardeningKitty performs an audit, saves the results and creates a log file:
+        Invoke-HardeningKitty -Mode Audit -Log -Report
+
+        Description: HardeningKitty performs an audit with a specific list and does not show machine information:
+        Invoke-HardeningKitty -FileFindingList .\lists\finding_list_0x6d69636b_user.csv -SkipMachineInformation
+
+        Description: HardeningKitty ready only the setting with the default list, and saves the results in a specific file:
+        Invoke-HardeningKitty -Mode Config -Report -Report C:\tmp\my_hardeningkitty_report.log
         
-        Description: HardeningKitty performs an audit, saves the results and creates a log file
     #>
 
     [CmdletBinding()]
@@ -89,6 +100,10 @@
         # Create a log file
         [Switch]
         $Log = $false,
+
+        # Skip machine information, useful when debugging
+        [Switch]
+        $SkipMachineInformation = $false,        
 
         # Define name and path of the log file
         [String]
@@ -485,7 +500,7 @@
     #
     # Start Main
     #
-    $HardeningKittyVersion = "0.5.5-1620277835"
+    $HardeningKittyVersion = "0.5.5-1620478957"
 
     #
     # Log and report file
@@ -527,30 +542,32 @@
     #
     # Machine information
     #
-    Write-Output "`n" 
-    Write-ProtocolEntry -Text "Getting machine information" -LogLevel "Info"
-    $MachineInformation = Get-ComputerInfo
+    If (-not($SkipMachineInformation)) {
+        Write-Output "`n" 
+        Write-ProtocolEntry -Text "Getting machine information" -LogLevel "Info"
+        $MachineInformation = Get-ComputerInfo
 
-    $Message = "Hostname: "+$MachineInformation.CsDNSHostName
-    Write-ProtocolEntry -Text $Message -LogLevel "Notime"
-    $Message = "Domain: "+$MachineInformation.CsDomain
-    Write-ProtocolEntry -Text $Message -LogLevel "Notime"
-    $Message = "Domain role: "+$MachineInformation.CsDomainRole
-    Write-ProtocolEntry -Text $Message -LogLevel "Notime"
-    $Message = "Install date: "+$MachineInformation.OsInstallDate
-    Write-ProtocolEntry -Text $Message -LogLevel "Notime"
-    $Message = "Last Boot Time: "+$MachineInformation.OsLastBootUpTime
-    Write-ProtocolEntry -Text $Message -LogLevel "Notime"
-    $Message = "Uptime: "+$MachineInformation.OsUptime
-    Write-ProtocolEntry -Text $Message -LogLevel "Notime"
-    $Message = "Windows: "+$MachineInformation.WindowsProductName
-    Write-ProtocolEntry -Text $Message -LogLevel "Notime"
-    $Message = "Windows edition: "+$MachineInformation.WindowsEditionId
-    Write-ProtocolEntry -Text $Message -LogLevel "Notime"
-    $Message = "Windows version: "+$MachineInformation.WindowsVersion
-    Write-ProtocolEntry -Text $Message -LogLevel "Notime"
-    $Message = "Windows build: "+$MachineInformation.WindowsBuildLabEx
-    Write-ProtocolEntry -Text $Message -LogLevel "Notime"
+        $Message = "Hostname: "+$MachineInformation.CsDNSHostName
+        Write-ProtocolEntry -Text $Message -LogLevel "Notime"
+        $Message = "Domain: "+$MachineInformation.CsDomain
+        Write-ProtocolEntry -Text $Message -LogLevel "Notime"
+        $Message = "Domain role: "+$MachineInformation.CsDomainRole
+        Write-ProtocolEntry -Text $Message -LogLevel "Notime"
+        $Message = "Install date: "+$MachineInformation.OsInstallDate
+        Write-ProtocolEntry -Text $Message -LogLevel "Notime"
+        $Message = "Last Boot Time: "+$MachineInformation.OsLastBootUpTime
+        Write-ProtocolEntry -Text $Message -LogLevel "Notime"
+        $Message = "Uptime: "+$MachineInformation.OsUptime
+        Write-ProtocolEntry -Text $Message -LogLevel "Notime"
+        $Message = "Windows: "+$MachineInformation.WindowsProductName
+        Write-ProtocolEntry -Text $Message -LogLevel "Notime"
+        $Message = "Windows edition: "+$MachineInformation.WindowsEditionId
+        Write-ProtocolEntry -Text $Message -LogLevel "Notime"
+        $Message = "Windows version: "+$MachineInformation.WindowsVersion
+        Write-ProtocolEntry -Text $Message -LogLevel "Notime"
+        $Message = "Windows build: "+$MachineInformation.WindowsBuildLabEx
+        Write-ProtocolEntry -Text $Message -LogLevel "Notime"
+    }
 
     #
     # User information
@@ -1195,6 +1212,7 @@
                     ">=" { try { If ([int]$Result -ge [int]$Finding.RecommendedValue) { $ResultPassed = $true }} catch { $ResultPassed = $false }; Break}
                     "contains" { If ($Result.Contains($Finding.RecommendedValue)) { $ResultPassed = $true }; Break}
                     "!="  { If ([string] $Result -ne $Finding.RecommendedValue) { $ResultPassed = $true }; Break}
+                    "=|0" { try { If ([string]$Result -eq $Finding.RecommendedValue -or $Result.Length -eq 0) { $ResultPassed = $true }} catch { $ResultPassed = $false }; Break}
                 }
 
                 #
